@@ -9,9 +9,6 @@ colordef white
 dbstop if error
 
 addpathVENUS    % add the folders needed for a VENUS simulation
-% rmpath OtticoBar/new22Optica
-rmpath OtticoBar/new23OpticaGR
-rmpath OtticoBar/old22Optica
 
 % Flag to avoid slow geom generation (load geom file)
 flgGEOM=1;     % 1, carica vecchia geom
