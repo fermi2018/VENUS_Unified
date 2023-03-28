@@ -1,0 +1,1 @@
+Pierluigi ha fatto solo una media azimutale (lungo phi), al fine di non appesantire troppo il codice; nel caso circolare, questo non introduce approssimazioni; bisogna tenerne conto nel caso generico 3D.

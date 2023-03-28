@@ -1,0 +1,9 @@
+
+
+ %quiverCorrente
+ 
+ quiverCorrenteNP
+ 
+ leakagePlot
+
+ Efficienza

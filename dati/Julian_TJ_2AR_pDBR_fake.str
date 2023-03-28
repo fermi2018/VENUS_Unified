@@ -1,0 +1,138 @@
+$ DATAFORDD_START
+% P_i e P_f sono il paio di inizio e fine dello strato equivalente, da sinistra verso destra
+% P_i = P_f per eliminare strato equivalente, oppure togliere o commentare con % il campo mirroreq
+% se scrivi con il simbolo di dollaro, la funzione riconosce il simbolo e agisce.
+$ mirroreq_p P_i=0 P_f=12 x_eq=0.44 Dop_eq=9.5e17 Mateq=AlGaAs Nmesh=25 f_any=1
+$ mirroreq_n P_i=0 P_f=37 x_eq=0.44 Dop_eq=1.5e18 Mateq=AlGaAs Nmesh=21 f_any=1
+$ mesa Dpass=1
+% PassivationSection passiv_size=6 passiv_mesh=12
+% PassivationSection passiv_size=10 passiv_mesh=8 passiv_depth=3.5
+% Allarga la simulazione di passive_size dall'ossido in poi
+% Metalring radius_i=5.25 width=6
+% Devono essere uguali a quelli ottici
+% DD_radial_sections radii radie: significa che sono aggiunte due colonne, i cui limiti
+% sono oxide-radii oxide+radie
+% DD_radial_sections radii=0. radie=0. Radial_mesh=.5+10j 
+% DD_radial_sections radii=0. radie=0. Radial_mesh=.14+100j .25+500j .4+15j
+$ DD_radial_sections radii=0.5 radie=0.3 Radial_mesh=.1+10j .01+5j .01+2j .01+7j  0.01+10j 
+%  Radial_mesh organizza la mesh radiale: per ogni colonna, si da il passo (parte reale)
+% e il n. max di punti (parte immaginaria)
+$ buffer thick=110 thick_dd=109990 size=50
+$ Thermal metal=3e-4 pass=5e-7 air=2.5e-8 cavity=1.5e-5 substrate=4.6e-5 dbr=1.5e-5
+$ DATAFORDD_END
+
+
+% QW emits at 924 nm, detuning of 18nm
+Wavelength 940 nm
+
+FATTORE_Z 1.00
+
+Reference Ref 3.6 0 2.5
+
+LcPor FF_ang@10cm 1 1000 Ref 1 0
+
+Lc  1 150. Ref 1  0.  circle 8|P2 Au    circle 11|P3 Ref 1  0 
+Lc  1  30. Ref 1  0.  circle 8|P2 Pt    circle 11|P3 Ref 1  0   
+LcDD  1  20. Ref 1  0.  circle 8|P2 Ti  circle 11|P3 Ref 1  0 
+
+Lc  Na=6.00e19     			1  40       AlGaAs 0.0         20     Nmesh=3
+Lc  Na=2.00e18 			    1 150       AlGaAs 0.12 	   1     	Nmesh=4
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Top DBR (17 + 5 pairs)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 12 pairs
+Lga  Na=2.00e18 Na=2.00e18 12 25        AlGaAs 0.12 0.90 1 1 Ndis=5 Nmesh=5
+Lca  Na=8.00e17 		   12 51.7      AlGaAs 0.90 	   1     	Nmesh=2
+Lga  Na=1.50e18 Na=1.50e18 12 25        AlGaAs 0.90 0.12 1 1 Ndis=5 Nmesh=5
+Lca  Na=8.00e17 		   12 43        AlGaAs 0.12 	   1     	Nmesh=2
+
+Lca  Na=1.50e18 		    1 0.1       AlGaAs 0.12 	   1     	Nmesh=1
+
+% 5 pairs
+Lga  Na=1.50e18 Na=1.50e18  5 25        AlGaAs 0.12 0.90 1 1 Ndis=5 Nmesh=5
+Lca  Na=6.00e17 		    5 51.7      AlGaAs 0.90 	   1     	Nmesh=2
+Lga  Na=1.00e18 Na=1.00e18  5 25        AlGaAs 0.90 0.12 1 1 Ndis=5 Nmesh=5
+Lca  Na=6.00e17 		    5 43        AlGaAs 0.12 	   1     	Nmesh=2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%% Cavity region %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 1st Oxide aperture
+Lga  Na=2.00e18 Na=2.00e18  1 10        AlGaAs 0.12 0.90 1 1 Ndis=3 Nmesh=3
+Lca  Na=2.00e18 		    1 20        AlGaAs 0.995      1 circle 8|P1 Ref 1.1 0  Nmesh=2
+Lga  Na=2.00e18 Na=2.00e18  1  5        AlGaAs 0.90 0.60 1 1 Ndis=3 Nmesh=2
+Lca  Na=5.00e17 		    1 40        AlGaAs 0.60 	   1     	Nmesh=2
+Lga  Na=5.00e17 Na=1.00e17  1 87        AlGaAs 0.60 0.30 1 1 Ndis=3 Nmesh=4
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% 1st active region %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+LcaC     1  54                   AlGaAs 0.29  0 Nmesh=4
+
+Lc     -1  7.7                 AlGaAs 0.00  0 Nmesh=8
+Lc      1  5                   AlGaAs 0.29  0 Nmesh=5
+Lcr    -1  7.7                 AlGaAs 0.00  0  circle 3|P1 Nmesh=8
+Lc      1  5                   AlGaAs 0.29  0 Nmesh=5
+Lc     -1  7.7                 AlGaAs 0.00  0 Nmesh=8
+Lca    1  31.35                  AlGaAs 0.29  0 Nmesh=5
+
+%%%%%%%%%%%%%%%% BTJ %%%%%%%%%%%%%%%%%
+LcaNEGF      Nd=2e19 1 20   AlGaAs 0.00  20 Nmesh=7
+LcaNEGF      Na=8e19 1 15 	AlGaAs 0.00  20 Nmesh=5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 2nd Oxide aperture
+Lca  Na=1.00e18 		    1 17        AlGaAs 0.30 	   1     	Nmesh=2
+Lga  Na=1.00e18 Na=1.00e18  1 87        AlGaAs 0.30 0.60 1 1 Ndis=3 Nmesh=4
+Lga  Na=2.00e18 Na=2.00e18  1  5        AlGaAs 0.60 0.90 1 1 Ndis=2 Nmesh=2
+Lca  Na=2.00e18 		    1 20        AlGaAs 0.995     1 circle 8|P1 Ref 1.1 0  Nmesh=2
+Lga  Na=2.00e18 Na=2.00e18  1  5        AlGaAs 0.90 0.60 1 1 Ndis=2 Nmesh=2
+Lga  Na=6.00e17 Na=1.00e17  1 87        AlGaAs 0.60 0.30 1 1 Ndis=3 Nmesh=4
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% 2nd active region %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Lca     1  83.35                AlGaAs 0.29  0 Nmesh=10
+Lc     -1  7.7                 AlGaAs 0.00  0 Nmesh=8
+Lc      1  5                   AlGaAs 0.29  0 Nmesh=5
+Lc    -1  7.7                 AlGaAs 0.00  0   Nmesh=8
+Lc      1  5                   AlGaAs 0.29  0 Nmesh=5
+Lc     -1  7.7                 AlGaAs 0.00  0 Nmesh=8
+LcaC    1  48.35                AlGaAs 0.29  0 Nmesh=10
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Lga  Nd=5.00e17 Nd=5.00e16  1 87        AlGaAs 0.30 0.60 1 1 Ndis=3 Nmesh=4
+Lga  Nd=1.00e18 Nd=1.00e18  1 10        AlGaAs 0.60 0.90 1 1 Ndis=2 Nmesh=2
+Lca  Nd=7.00e17 		    1 47        AlGaAs 0.90 	   1     	Nmesh=2
+Lga  Nd=1.50e18 Nd=1.50e18  1 25        AlGaAs 0.90 0.12 1 1 Ndis=5 Nmesh=5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bottom DBR (37 + 5 pairs)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5 pairs
+Lca  Nd=5.00e17 		    5 43.2      AlGaAs 0.12 	   1     	Nmesh=2
+Lga  Nd=1.00e18 Nd=1.00e18  5 25        AlGaAs 0.12 0.90 1 1 Ndis=5 Nmesh=5
+Lca  Nd=7.00e17 		    5 51.6      AlGaAs 0.90 	   1     	Nmesh=2
+Lga  Nd=1.50e18 Nd=1.50e18  5 25        AlGaAs 0.90 0.12 1 1 Ndis=5 Nmesh=5
+
+Lca  Nd=1.00e18 		    1 0.1       AlGaAs 0.12 	   1     	Nmesh=1
+
+% 37 pairs
+Lca  Nd=1.00e18 		   37 43.2      AlGaAs 0.12 	   1     	Nmesh=2
+Lga  Nd=2.00e18 Nd=2.00e18 37 25        AlGaAs 0.12 0.90 1 1 Ndis=5 Nmesh=5
+Lca  Nd=1.00e18 		   37 51.6      AlGaAs 0.90 	   1     	Nmesh=2
+Lga  Nd=2.00e18 Nd=2.00e18 37 25        AlGaAs 0.90 0.12 1 1 Ndis=5 Nmesh=5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Substrate
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+LcPor       Nd=2e18               1  200         AlGaAs 0.00 0       Nmesh=15
+
+
+
