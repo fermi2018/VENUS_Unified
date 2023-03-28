@@ -1,0 +1,15 @@
+*.mat
+*.par
+*.asv
+*.bak
+
+dati/*.par
+LUT/*.mat
+
+facendo*
+sapar*
+
+out
+out/*.mat
+*.asv
+*.asv
