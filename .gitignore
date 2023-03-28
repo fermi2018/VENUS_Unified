@@ -9,7 +9,7 @@ LUT/*.mat
 facendo*
 sapar*
 
-out
+
 out/*.mat
 *.asv
 *.asv
